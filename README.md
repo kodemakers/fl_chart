@@ -1,11 +1,10 @@
 💥 FL Chart is a highly customizable Flutter chart library that supports Line Chart, Bar Chart, Pie Chart, Scatter Chart, and Radar Chart.  💥
 
+
 [![pub package](https://img.shields.io/pub/v/fl_chart.svg)](https://pub.dartlang.org/packages/fl_chart)
 [![codecov](https://codecov.io/gh/imaNNeoFighT/fl_chart/branch/master/graph/badge.svg?token=XBhsIZBbZG)](https://codecov.io/gh/imaNNeoFighT/fl_chart)
 <a href="https://github.com/Solido/awesome-flutter#charts"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
-<a href="https://pub.dev/packages/fl_chart"><img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/imaNNeoFighT/fl_chart"></a>
-<a href="https://github.com/imaNNeoFighT/fl_chart/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/imaNNeoFighT/fl_chart"></a>
-<a href="https://github.com/imaNNeoFighT/fl_chart/issues?q=is%3Aissue+is%3Aclosed"><img src="https://img.shields.io/github/issues-closed-raw/imaNNeoFighT/fl_chart" alt="GitHub closed issues"></a>
+[![APK](https://img.shields.io/badge/APK-Demo-brightgreen.svg)](https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/fl_chart_samples_0.3.0.apk)
 <span class="badge-buymeacoffee">
 <a href="https://www.buymeacoffee.com/fl_chart" title="Donate to this project using Buy Me A Coffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg" alt="Buy Me A Coffee donate button" /></a>
 </span>
@@ -37,13 +36,27 @@ Thank you all!
 
 # Let's get started
 
-First of all you need to add the `fl_chart` in your project. In order to do that, follow [this guide](https://pub.dev/packages/fl_chart/install).
+### 1 - Depend on it
 
-Then you need to read the docs. Start from [here](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/index.md).
+##### Add it to your package's pubspec.yaml file
 
-We suggest you to check samples source code.
+```yml
+dependencies:
+  fl_chart: ^0.45.0
+```
 
-##### - You can read about the animation handling [here](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/handle_animations.md)
+
+### 2 - Install it
+
+##### Install packages from the command line
+```sh
+flutter packages get
+```
+
+### 3 - Learn it like a charm
+##### Read the docs from [here](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/index.md)
+
+##### - [Animations](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/handle_animations.md)
 |Sample1	|Sample2		|Sample3		|
 |:------------:|:------------:|:-------------:|
 |	[![](https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/line_chart/line_chart_sample_1_anim.gif)](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#sample-1-source-code)   |	[![](https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/line_chart/line_chart_sample_2_anim.gif)](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#sample-2-source-code) | [![](https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/bar_chart/bar_chart_sample_1_anim.gif)](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md#sample-1-source-code) |
@@ -60,14 +73,7 @@ Or if you are a fan of crypto, you can donate me Bitcoins here:
 `1L7ghKdcmgydmUJAnmYmMaiVjT1LoP4a45`
 
 ### Contributing
-##### :beer: Pull requests are welcome!
-Don't forget that `open-source` makes no sense without contributors. No matter how big your changes are, it helps us a lot even it is a line of change.
+##### :beer: pull requests are welcome!
 
-There might be a lot of grammar issues in the docs. It's a big help to us to fix them if you are fluent in English.
-
-Check out [CONTRIBUTING.md](https://github.com/imaNNeoFighT/fl_chart/blob/master/CONTRIBUTING.md), which contains a guide for those who want to contribute to the FL Chart.
-
-Reporting bugs and issues are contribution too, yes it is.
-
-#### Below are the people who has contributed to the FL Chart. We hope we have your picture here soon.
-[![](https://opencollective.com/fl_chart/contributors.svg?width=890&button=false)](https://github.com/imaNNeoFighT/fl_chart/graphs/contributors)
+Check out [CONTRIBUTING.md](https://github.com/imaNNeoFighT/fl_chart/blob/master/CONTRIBUTING.md), which contains a guide for those
+who wish to contribute to FL Chart. Thanks in advance!

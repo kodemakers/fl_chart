@@ -15,6 +15,11 @@ class Utils {
   @visibleForTesting
   static void changeInstance(Utils val) => _singleton = val;
 
+  @visibleForTesting
+  static void restoreDefaultInstance() {
+    _singleton = Utils._internal();
+  }
+
   static const double _degrees2Radians = math.pi / 180.0;
 
   /// Converts degrees to radians
@@ -134,9 +139,6 @@ class Utils {
     }
     final accurateInterval =
         diffInAxis == 0 ? axisViewSize : diffInAxis / allowedCount;
-    if (allowedCount <= 2) {
-      return accurateInterval;
-    }
     return roundInterval(accurateInterval);
   }
 
@@ -258,7 +260,7 @@ class Utils {
       effectiveTextStyle = effectiveTextStyle!
           .merge(const TextStyle(fontWeight: FontWeight.bold));
     }
-    return effectiveTextStyle!;
+    return effectiveTextStyle ??= defaultTextStyle.style;
   }
 
   /// Finds the best initial interval value

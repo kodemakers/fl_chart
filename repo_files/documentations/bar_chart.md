@@ -50,10 +50,11 @@ enum values {`start`, `end`, `center`, `spaceEvenly`, `spaceAround`, `spaceBetwe
 ### BarChartRodData
 |PropName|Description|default value|
 |:-------|:----------|:------------|
-|fromY|Position that this bar starts from|0|
-|toY|This rod is from `fromY` to `toY` in the vertical axis|null|
-|color|color of the rod bar|[Colors.cyan]|
-|gradient| You can use any [Gradient](https://api.flutter.dev/flutter/dart-ui/Gradient-class.html) here. such as [LinearGradient](https://api.flutter.dev/flutter/painting/LinearGradient-class.html) or [RadialGradient](https://api.flutter.dev/flutter/painting/RadialGradient-class.html)|null|
+|y|endY position of the bar on vertical axis (height of the bar)|null|
+|colors|colors the rod bar, if multiple colors provided it will be gradient|[Colors.blueAccent]|
+|colorStops| gets the stop positions of the gradient color, [Read More](https://api.flutter.dev/flutter/dart-ui/Gradient/Gradient.linear.html)|null|
+|gradientFrom|determines start of the gradient, each number should be between 0 and 1, [Read More](https://api.flutter.dev/flutter/dart-ui/Gradient/Gradient.linear.html)|Offset(0, 0)|
+|gradientTo|determines end of the gradient, each number should be between 0 and 1, [Read More](https://api.flutter.dev/flutter/dart-ui/Gradient/Gradient.linear.html)|Offset(1, 0)|
 |width|stroke width of the rod bar|8|
 |borderRadius|Determines the edge rounding of the bar corners, see [BorderRadius](https://api.flutter.dev/flutter/painting/BorderRadius-class.html). When `null`, it defaults to completely round bars. |null|
 |borderSide|Determines the border stroke around of the bar, see [BorderSide](https://api.flutter.dev/flutter/painting/BorderSide-class.html). When `null`, it defaults to draw no stroke. |null|
@@ -64,11 +65,12 @@ enum values {`start`, `end`, `center`, `spaceEvenly`, `spaceAround`, `spaceBetwe
 ### BackgroundBarChartRodData
 |PropName|Description|default value|
 |:-------|:----------|:------------|
-|fromY|same as [BarChartRodData](#BarChartRodData)'s fromY|0|
-|toY|same as [BarChartRodData](#BarChartRodData)'s y|8|
+|y|same as [BarChartRodData](#BarChartRodData)'s y|8|
 |show|determines to show or hide this section|false|
-|color|same as [BarChartRodData](#BarChartRodData)'s colors|[Colors.blueGrey]|
-|gradient|same as [BarChartRodData](#BarChartRodData)'s gradient|null|
+|colors|same as [BarChartRodData](#BarChartRodData)'s colors|[Colors.blueGrey]|
+|colorStops|same as [BarChartRodData](#BarChartRodData)'s colorStops|null|
+|gradientFrom|same as [BarChartRodData](#BarChartRodData)'s gradientFrom|Offset(0, 0)|
+|gradientTo|same as [BarChartRodData](#BarChartRodData)'s gradientTo|Offset(1, 0)|
 
 ### BarChartRodStackItem
 |PropName|Description|default value|
@@ -148,14 +150,3 @@ enum values {`start`, `end`, `center`, `spaceEvenly`, `spaceAround`, `spaceBetwe
 
 ##### Sample 5 ([Source Code](/example/lib/bar_chart/samples/bar_chart_sample5.dart))
 <img src="https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/bar_chart/bar_chart_sample_5.gif" width="300" >
-
-##### Sample 6 ([Source Code](/example/lib/bar_chart/samples/bar_chart_sample6.dart))
-<img src="https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/bar_chart/bar_chart_sample_6.png" width="300" >
-
-##### Sample 7 ([Source Code](/example/lib/bar_chart/samples/bar_chart_sample7.dart))
-<img src="https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/bar_chart/bar_chart_sample_7.gif" width="300" >
-
-
-
-##### Gist - Toggleable Tooltip ([Source Code](https://gist.github.com/imaNNeoFighT/bce3f0169ff3fd6c3f137cdeb5005c0e))
-https://user-images.githubusercontent.com/7009300/156784816-53f95dd9-f387-4600-8a92-d05b1aeea3da.mov

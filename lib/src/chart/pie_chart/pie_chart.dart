@@ -21,10 +21,7 @@ class PieChart extends ImplicitlyAnimatedWidget {
     Key? key,
     Duration swapAnimationDuration = defaultDuration,
     Curve swapAnimationCurve = Curves.linear,
-  }) : super(
-            key: key,
-            duration: swapAnimationDuration,
-            curve: swapAnimationCurve);
+  }) : super(key: key, duration: swapAnimationDuration, curve: swapAnimationCurve);
 
   /// Creates a [_PieChartState]
   @override
@@ -39,20 +36,13 @@ class _PieChartState extends AnimatedWidgetBaseState<PieChart> {
   @override
   void initState() {
     /// Make sure that [_widgetsPositionHandler] is updated.
-    _ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() {});
       }
     });
-
     super.initState();
   }
-
-  /// This allows a value of type T or T? to be treated as a value of type T?.
-  ///
-  /// We use this so that APIs that have become non-nullable can still be used
-  /// with `!` and `?` to support older versions of the API as well.
-  T? _ambiguate<T>(T? value) => value;
 
   @override
   Widget build(BuildContext context) {
@@ -93,10 +83,10 @@ class BadgeWidgetsDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     for (var index = 0; index < badgeWidgetsCount; index++) {
-      final key = badgeWidgetsOffsets.keys.elementAt(index);
+      final _key = badgeWidgetsOffsets.keys.elementAt(index);
 
-      final finalSize = layoutChild(
-        key,
+      final _size = layoutChild(
+        _key,
         BoxConstraints(
           maxWidth: size.width,
           maxHeight: size.height,
@@ -104,10 +94,10 @@ class BadgeWidgetsDelegate extends MultiChildLayoutDelegate {
       );
 
       positionChild(
-        key,
+        _key,
         Offset(
-          badgeWidgetsOffsets[key]!.dx - (finalSize.width / 2),
-          badgeWidgetsOffsets[key]!.dy - (finalSize.height / 2),
+          badgeWidgetsOffsets[_key]!.dx - (_size.width / 2),
+          badgeWidgetsOffsets[_key]!.dy - (_size.height / 2),
         ),
       );
     }

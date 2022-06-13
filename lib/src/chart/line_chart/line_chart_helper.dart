@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/utils/list_wrapper.dart';
+
+import 'line_chart_data.dart';
 
 /// Contains anything that helps LineChart works
 class LineChartHelper {
@@ -31,35 +32,32 @@ class LineChartHelper {
       return LineChartMinMaxAxisValues(0, 0, 0, 0);
     }
 
-    final FlSpot firstValidSpot;
-    try {
-      firstValidSpot =
-          lineBarData.spots.firstWhere((element) => element != FlSpot.nullSpot);
-    } catch (e) {
-      // There is no valid spot
-      return LineChartMinMaxAxisValues(0, 0, 0, 0);
-    }
+    var minX = lineBarData.spots[0].x;
+    var maxX = lineBarData.spots[0].x;
+    var minY = lineBarData.spots[0].y;
+    var maxY = lineBarData.spots[0].y;
 
-    var minX = firstValidSpot.x;
-    var maxX = firstValidSpot.x;
-    var minY = firstValidSpot.y;
-    var maxY = firstValidSpot.y;
+    for (var i = 0; i < lineBarsData.length; i++) {
+      final barData = lineBarsData[i];
+      for (var j = 0; j < barData.spots.length; j++) {
+        final spot = barData.spots[j];
+        if (spot.isNotNull()) {
+          if (spot.x > maxX) {
+            maxX = spot.x;
+          }
 
-    for (var barData in lineBarsData) {
-      if (barData.mostRightSpot.x > maxX) {
-        maxX = barData.mostRightSpot.x;
-      }
+          if (spot.x < minX) {
+            minX = spot.x;
+          }
 
-      if (barData.mostLeftSpot.x < minX) {
-        minX = barData.mostLeftSpot.x;
-      }
+          if (spot.y > maxY) {
+            maxY = spot.y;
+          }
 
-      if (barData.mostTopSpot.y > maxY) {
-        maxY = barData.mostTopSpot.y;
-      }
-
-      if (barData.mostBottomSpot.y < minY) {
-        minY = barData.mostBottomSpot.y;
+          if (spot.y < minY) {
+            minY = spot.y;
+          }
+        }
       }
     }
 
@@ -101,5 +99,82 @@ class LineChartMinMaxAxisValues with EquatableMixin {
       maxY ?? this.maxY,
       readFromCache: readFromCache ?? this.readFromCache,
     );
+  }
+}
+
+/// Extensions on [LineChartBarData]
+extension LineChartDataExtension on LineChartBarData {
+  /// Returns colorStops
+  ///
+  /// if [colorStops] provided, returns it directly,
+  /// Otherwise we calculate it using colors list
+  List<double> getSafeColorStops() {
+    var stops = <double>[];
+    if (colorStops == null || colorStops!.length != colors.length) {
+      if (colors.length > 1) {
+        /// provided colorStops is invalid and we calculate it here
+        colors.asMap().forEach((index, color) {
+          final percent = 1.0 / (colors.length - 1);
+          stops.add(percent * index);
+        });
+      } else {
+        throw ArgumentError('"colors" must have length > 1.');
+      }
+    } else {
+      stops = colorStops!;
+    }
+    return stops;
+  }
+}
+
+/// Extensions on [BarAreaData]
+extension BarAreaDataExtension on BarAreaData {
+  /// Returns colorStops
+  ///
+  /// if [colorStops] provided, returns it directly,
+  /// Otherwise we calculate it using colors list
+  List<double> getSafeColorStops() {
+    var stops = <double>[];
+    if (gradientColorStops == null ||
+        gradientColorStops!.length != colors.length) {
+      if (colors.length > 1) {
+        /// provided colorStops is invalid and we calculate it here
+        colors.asMap().forEach((index, color) {
+          final percent = 1.0 / (colors.length - 1);
+          stops.add(percent * index);
+        });
+      } else {
+        throw ArgumentError('"colors" must have length > 1.');
+      }
+    } else {
+      stops = gradientColorStops!;
+    }
+    return stops;
+  }
+}
+
+/// Extensions on [BetweenBarsData]
+extension BetweenBarsDataExtension on BetweenBarsData {
+  /// Returns colorStops
+  ///
+  /// if [colorStops] provided, returns it directly,
+  /// Otherwise we calculate it using colors list
+  List<double> getSafeColorStops() {
+    var stops = <double>[];
+    if (gradientColorStops == null ||
+        gradientColorStops!.length != colors.length) {
+      if (colors.length > 1) {
+        /// provided colorStops is invalid and we calculate it here
+        colors.asMap().forEach((index, color) {
+          final percent = 1.0 / (colors.length - 1);
+          stops.add(percent * index);
+        });
+      } else {
+        throw ArgumentError('"colors" must have length > 1.');
+      }
+    } else {
+      stops = gradientColorStops!;
+    }
+    return stops;
   }
 }

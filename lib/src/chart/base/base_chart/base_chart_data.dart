@@ -1,9 +1,7 @@
 // coverage:ignore-file
-import 'dart:core';
-
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/extensions/border_extension.dart';
+import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'base_chart_painter.dart';
@@ -54,9 +52,6 @@ class FlBorderData with EquatableMixin {
               width: 1.0,
               style: BorderStyle.solid,
             );
-
-  /// returns false if all borders have 0 width or 0 opacity
-  bool isVisible() => show && border.isVisible();
 
   /// Lerps a [FlBorderData] based on [t] value, check [Tween.lerp].
   static FlBorderData lerp(FlBorderData a, FlBorderData b, double t) {
@@ -176,6 +171,28 @@ class FlClipData with EquatableMixin {
   @override
   List<Object?> get props => [top, bottom, left, right];
 }
+
+/// It gives you the axis value and gets a String value based on it.
+typedef GetTitleFunction = String Function(double value);
+
+/// The default [SideTitles.getTitles] function.
+///
+/// formats the axis number to a shorter string using [formatNumber].
+String defaultGetTitle(double value) {
+  return Utils().formatNumber(value);
+}
+
+/// It gives you the axis value and gets a TextStyle based on given value
+///
+/// If you return null, we try to provide an inherited TextStyle using theme.
+/// (you can customize a specific title using this).
+typedef GetTitleTextStyleFunction = TextStyle? Function(
+    BuildContext context, double value);
+
+/// The default [SideTitles.getTextStyles] function.
+///
+/// returns a black TextStyle with 11 fontSize for all values.
+TextStyle? defaultGetTitleTextStyle(BuildContext context, double value) => null;
 
 /// Chart's touch callback.
 typedef BaseTouchCallback<R extends BaseTouchResponse> = void Function(

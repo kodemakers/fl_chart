@@ -1,75 +1,11 @@
-## newVersion
-* **BUGFIX** (by @imaNNeoFighT): Fix tooltip issue on negative bar charts, #978.
-* **IMPROVEMENT** (by @imaNNeoFighT): Use Container to draw axis-based charts border.
-* **FEATURE** (by @FlorianArnould) Add the ability to select the RadarChart shape (circle or polygon), #1047.
-* **BUGFIX** (by @imaNNeoFighT): Fix LineChart titles problem with single FlSpot, #1053.
-
-## 0.51.0
-* **FEATURE** (by @imaNNeoFighT): Add `SideTitleWidget` to help you use it in [SideTitles.getTitlesWidget]. It's a wrapper around your widget. It keeps your provided `child` widget close to the chart. It has `angle` and `space` properties to handle margin and rotation. There is a `axisSide` property that you should fill, it has provided to you in the MetaData object. Check the below sample:
-```dart
-getTitlesWidget: (double value, TitleMeta meta) {
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    space: 8.0,
-    angle: 0.0,
-    child: const Text("This is your widget"),
-  );
-},
-```
-* **IMPROVEMENT** (by @imaNNeoFighT): Fix default LineChart interval issue on small view sizes, #909.
-
-## 0.50.6
-* **IMPROVEMENT** Fix a backward compatibility issue with Flutter 3.0, #1016
-
-## 0.50.5
-* **IMPROVEMENT** Fix test coverage problem again :/
-
-## 0.50.4
-* **IMPROVEMENT** Fix test coverage problem 
-
-## 0.50.3
-* **IMPROVEMENT** Fix order of drawing lineChart bar indicator problem, #198.
-* **FEATURE** Add `isStrokeJoinRound` property in [LineChartBarData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#linechartbardata).
-* **IMPROVEMENT** Upgrade to Flutter 3, #997.
-* **FEATURE** Add `chartRendererKey` property to the [LineChart](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md), [BarChart](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md), and [ScatterChart](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/scatter_chart.md). We pass it directly to our chart renderers that are responsible to render the chart itself (without anything around it like titles), #987.
-
-## 0.50.1 
-* **BUGFIX** Allow to show axisTitle without sideTitles, #963
-
-## 0.50.0
-**This release has some breaking changes. So please check out the migration guide [here](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/migration_guides/MIGRATION_00_50_00.md)**
-* **IMPROVEMENT** Allow to return a Widget in [SideTitles.getTitlesWidget](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/base_chart.md#sidetitles) instead of a `String`. For example, you can pass an [Icon](https://api.flutter.dev/flutter/widgets/Icon-class.html) widget as a title, #183. Check below samples:
-> **LineChartSample 8** ([Source Code](https://github.com/imaNNeoFighT/fl_chart/blob/master/example/lib/line_chart/samples/line_chart_sample8.dart))
-> <img src="https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/line_chart/line_chart_sample_8.png" width="300" >
-> 
-> **BarChartSample 7** ([Source Code](https://github.com/imaNNeoFighT/fl_chart/blob/master/example/lib/bar_chart/samples/bar_chart_sample7.dart))
-> 
-> <img src="https://github.com/imaNNeoFighT/fl_chart/raw/master/repo_files/images/bar_chart/bar_chart_sample_7.gif" width="300" >
-* **BREAKING** Structure of `FlTitlesData`, `AxisTitles`, and `SideTitles` are changed. Because we are using a new system which allows you to pass any [Flutter Widget](https://docs.flutter.dev/development/ui/widgets) as a title instead of passing `string`, `textStyle`, `textAlign`, `rotation`, ... (Read our [Migration Guide](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/migration_guides/MIGRATION_00_50_00.md))
-* **FEATURE** Now we can use any [Gradient](https://api.flutter.dev/flutter/dart-ui/Gradient-class.html) such as [LinearGradient](https://api.flutter.dev/flutter/painting/LinearGradient-class.html) and [RadialGradient](https://api.flutter.dev/flutter/painting/RadialGradient-class.html) everywhere we have gradient.
-* **BUGFIX** Fix BarChart rods gradient problem, #703.
-* **BREAKING** `colors` property renamed to `color` to keep only one solid color. And now we have a `gradient` field instead of `colorStops`, `gradientFrom` and `gradientTo` in following classes: [BarChartRodData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md#barchartroddata), [BackgroundBarChartRodData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md#backgroundbarchartroddata), [BarAreaData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#BarAreaData), [BetweenBarsData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#betweenbarsdata), [LineChartBarData](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#linechartbardata). (Read our [Migration Guide](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/migration_guides/MIGRATION_00_50_00.md) to learn more about it)
-
-## 0.46.0
-* **BUGFIX** Fix drawing BetweenBarsArea problem when there are `nullSpots` in fromLine and toLine, #912.
-* **FEATURE** Allow to have vertically grouped BarChart using `fromY` and `toY` properties in [BarChartRodData](https://github.com/imaNNeoFighT/fl_chart/blob/feature/multi-rods-on-bar-chart/repo_files/documentations/bar_chart.md#BarChartRodData) It means you can have a negative and a positive bar chart at the same X location. #334, #875. Check [BarChartSample5](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md#sample-5-source-code) and [BarChartSample6](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/bar_chart.md#sample-6-source-code.
-* **BREAKING** Renamed `y` property to `toY` in [BarChartRodData](https://github.com/imaNNeoFighT/fl_chart/blob/feature/multi-rods-on-bar-chart/repo_files/documentations/bar_chart.md#BarChartRodData) and [BackgroundBarChartRodData](https://github.com/imaNNeoFighT/fl_chart/blob/feature/multi-rods-on-bar-chart/repo_files/documentations/bar_chart.md#backgroundbarchartroddata) due to the above feature.
-* **BUGFIX** Fix smaller radius bubble hiding behind bigger radius bubble in ScatterChart, #930.
-* **BUGFIX** Fix tooltip text alignment and direction in line chart, #927.
-
-## 0.45.1
-* **IMPORTANT** **Fuck Vladimir Putin**
-* **BUGFIX** Fix `FlSpot.nullSpot` at the first of list bug, #912.
-* **FEATURE** Add `scatterLabelSettings` property in [ScatterChart](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/scatter_chart.md) which lets you to add titles on the spots, #902.
-
 ## 0.45.0
 * **BUGFIX** Fix `clipData` implementation in ScatterChart and LineChart, #897.
 * **BUGFIX** Fix PieChart changing sections issue (we have disabled semantics for pieChart badgeWidgets), #861.
 * **BUGFIX** Fix LineChart width smaller width or height lower than 40, #869, #857.
-* **BUGFIX** Allow to show title when axis diff is zero, #842, #879.
+* **BUGFIX** Allow to show title when axis diff is zero.
 * **IMPROVEMENT** Improve iteration over axis values logic (it solves some minor problems on showing titles when min, max values are below than 1.0).
-* **IMPROVEMENT** Add `baselineX` and `baselineY` property in our axis-based charts, It fixes a problem about `interval` which mentioned in #893 (check [this sample](https://github.com/imaNNeoFighT/fl_chart/blob/master/repo_files/documentations/line_chart.md#gist---baselinex-baseliney-sample-source-code).
-* **IMPROVEMENT** Added `distanceCalculator` to `LineTouchData` which is used to calculate the distance between spots and touch events, #716, #261, #892
+* **IMPROVEMENT** Add `baselineX` and `baselineY` property in our axis-based charts, It fixes a problem about `interval` which mentioned in #893 (check [this sample](https://github.com/imaNNeoFighT/fl_chart/blob/hotfix/initial-interval-baseline/repo_files/documentations/line_chart.md#gist---baselinex-baseliney-sample-source-code).
+* **IMPROVEMENT** Added `distanceCalculator` to `LineTouchData` which is used to calculate the distance between spots and touch events
 * **BREAKING** `LineTouchResponse` response now contains a list of `TouchLineBarSpot` instead of `LineBarSpot`. They are ordered based on their distance to the touch event and also contain that distance.
 
 ## 0.41.0

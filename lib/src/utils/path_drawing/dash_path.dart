@@ -17,7 +17,7 @@ Path dashPath(
   assert(dashArray != null); // ignore: unnecessary_null_comparison
 
   dashOffset = dashOffset ?? const DashOffset.absolute(0.0);
-  // TODO: Is there some way to determine how much of a path would be visible today?
+  //  Is there some way to determine how much of a path would be visible today?
 
   final dest = Path();
   for (final metric in source.computeMetrics()) {
@@ -61,9 +61,7 @@ class DashOffset {
   final _DashOffsetType _dashOffsetType;
 
   double _calculate(double length) {
-    return _dashOffsetType == _DashOffsetType.absolute
-        ? _rawVal
-        : length * _rawVal;
+    return _dashOffsetType == _DashOffsetType.absolute ? _rawVal : length * _rawVal;
   }
 }
 

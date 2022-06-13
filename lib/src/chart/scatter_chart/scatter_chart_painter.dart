@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_helper.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
@@ -12,10 +13,10 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
   /// [_spotsPaint] is responsible to draw scatter spots
   late Paint _spotsPaint, _bgTouchTooltipPaint;
 
-  /// Paints [dataList] into canvas, it is the animating [ScatterChartData],
+  /// Paints [data] into canvas, it is the animating [ScatterChartData],
   /// [targetData] is the animation's target and remains the same
   /// during animation, then we should use it  when we need to show
-  /// tooltips or something like that, because [dataList] is changing constantly.
+  /// tooltips or something like that, because [data] is changing constantly.
   ///
   /// [textScale] used for scaling texts inside the chart,
   /// parent can use [MediaQuery.textScaleFactor] to respect
@@ -33,18 +34,203 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
   void paint(BuildContext context, CanvasWrapper canvasWrapper,
       PaintHolder<ScatterChartData> holder) {
     super.paint(context, canvasWrapper, holder);
-    drawSpots(context, canvasWrapper, holder);
+    drawAxisTitles(context, canvasWrapper, holder);
+    drawTitles(context, canvasWrapper, holder);
+    drawSpots(canvasWrapper, holder);
     drawTouchTooltips(context, canvasWrapper, holder);
   }
 
   @visibleForTesting
+  void drawTitles(BuildContext context, CanvasWrapper canvasWrapper,
+      PaintHolder<ScatterChartData> holder) {
+    final data = holder.data;
+    final targetData = holder.targetData;
+    if (!targetData.titlesData.show) {
+      return;
+    }
+    final viewSize = getChartUsableDrawSize(canvasWrapper.size, holder);
+
+    // Left Titles
+    final leftTitles = targetData.titlesData.leftTitles;
+    final leftInterval = leftTitles.interval ??
+        Utils().getEfficientInterval(viewSize.height, data.verticalDiff);
+    if (leftTitles.showTitles) {
+      AxisChartHelper().iterateThroughAxis(
+        min: data.minY,
+        max: data.maxY,
+        baseLine: data.baselineY,
+        interval: leftInterval,
+        action: (axisValue) {
+          if (leftTitles.checkToShowTitle(
+              data.minY, data.maxY, leftTitles, leftInterval, axisValue)) {
+            var x = 0 + getLeftOffsetDrawSize(holder);
+            var y = getPixelY(axisValue, viewSize, holder);
+
+            final text = leftTitles.getTitles(axisValue);
+
+            final span = TextSpan(
+              style: Utils().getThemeAwareTextStyle(
+                  context, leftTitles.getTextStyles(context, axisValue)),
+              text: text,
+            );
+            final tp = TextPainter(
+              text: span,
+              textAlign: leftTitles.textAlign,
+              textDirection: leftTitles.textDirection,
+              textScaleFactor: holder.textScale,
+            );
+            tp.layout(
+              maxWidth: leftTitles.reservedSize,
+              minWidth: leftTitles.reservedSize,
+            );
+            x -= tp.width + leftTitles.margin;
+            y -= tp.height / 2;
+
+            x += Utils()
+                .calculateRotationOffset(tp.size, leftTitles.rotateAngle)
+                .dx;
+            canvasWrapper.drawText(tp, Offset(x, y), leftTitles.rotateAngle);
+          }
+        },
+      );
+    }
+
+    // Top titles
+    final topTitles = targetData.titlesData.topTitles;
+    final topInterval = topTitles.interval ??
+        Utils().getEfficientInterval(viewSize.width, data.horizontalDiff);
+    if (topTitles.showTitles) {
+      AxisChartHelper().iterateThroughAxis(
+        min: data.minX,
+        max: data.maxX,
+        baseLine: data.baselineX,
+        interval: topInterval,
+        action: (axisValue) {
+          if (topTitles.checkToShowTitle(
+              data.minX, data.maxX, topTitles, topInterval, axisValue)) {
+            var x = getPixelX(axisValue, viewSize, holder);
+            var y = getTopOffsetDrawSize(holder);
+
+            final text = topTitles.getTitles(axisValue);
+
+            final span = TextSpan(
+              style: Utils().getThemeAwareTextStyle(
+                  context, topTitles.getTextStyles(context, axisValue)),
+              text: text,
+            );
+            final tp = TextPainter(
+              text: span,
+              textAlign: topTitles.textAlign,
+              textDirection: topTitles.textDirection,
+              textScaleFactor: holder.textScale,
+            );
+            tp.layout();
+
+            x -= tp.width / 2;
+            y -= topTitles.margin + tp.height;
+            y += Utils()
+                .calculateRotationOffset(tp.size, topTitles.rotateAngle)
+                .dy;
+            canvasWrapper.drawText(tp, Offset(x, y), topTitles.rotateAngle);
+          }
+        },
+      );
+    }
+
+    // Right Titles
+    final rightTitles = targetData.titlesData.rightTitles;
+    final rightInterval = rightTitles.interval ??
+        Utils().getEfficientInterval(viewSize.height, data.verticalDiff);
+    if (rightTitles.showTitles) {
+      AxisChartHelper().iterateThroughAxis(
+        min: data.minY,
+        max: data.maxY,
+        baseLine: data.baselineY,
+        interval: rightInterval,
+        action: (axisValue) {
+          if (rightTitles.checkToShowTitle(
+              data.minY, data.maxY, rightTitles, rightInterval, axisValue)) {
+            var x = viewSize.width + getLeftOffsetDrawSize(holder);
+            var y = getPixelY(axisValue, viewSize, holder);
+
+            final text = rightTitles.getTitles(axisValue);
+
+            final span = TextSpan(
+              style: Utils().getThemeAwareTextStyle(
+                  context, rightTitles.getTextStyles(context, axisValue)),
+              text: text,
+            );
+            final tp = TextPainter(
+              text: span,
+              textAlign: rightTitles.textAlign,
+              textDirection: rightTitles.textDirection,
+              textScaleFactor: holder.textScale,
+            );
+            tp.layout(
+              maxWidth: rightTitles.reservedSize,
+              minWidth: rightTitles.reservedSize,
+            );
+
+            x += rightTitles.margin;
+            y -= tp.height / 2;
+            x -= Utils()
+                .calculateRotationOffset(tp.size, rightTitles.rotateAngle)
+                .dx;
+            canvasWrapper.drawText(tp, Offset(x, y), rightTitles.rotateAngle);
+          }
+        },
+      );
+    }
+
+    // Bottom titles
+    final bottomTitles = targetData.titlesData.bottomTitles;
+    final bottomInterval = bottomTitles.interval ??
+        Utils().getEfficientInterval(viewSize.width, data.horizontalDiff);
+    if (bottomTitles.showTitles) {
+      AxisChartHelper().iterateThroughAxis(
+        min: data.minX,
+        max: data.maxX,
+        baseLine: data.baselineX,
+        interval: bottomInterval,
+        action: (axisValue) {
+          if (bottomTitles.checkToShowTitle(
+              data.minX, data.maxX, bottomTitles, bottomInterval, axisValue)) {
+            var x = getPixelX(axisValue, viewSize, holder);
+            var y = viewSize.height + getTopOffsetDrawSize(holder);
+
+            final text = bottomTitles.getTitles(axisValue);
+
+            final span = TextSpan(
+              style: Utils().getThemeAwareTextStyle(
+                  context, bottomTitles.getTextStyles(context, axisValue)),
+              text: text,
+            );
+            final tp = TextPainter(
+              text: span,
+              textAlign: bottomTitles.textAlign,
+              textDirection: bottomTitles.textDirection,
+              textScaleFactor: holder.textScale,
+            );
+            tp.layout();
+
+            x -= tp.width / 2;
+            y += bottomTitles.margin;
+            y -= Utils()
+                .calculateRotationOffset(tp.size, bottomTitles.rotateAngle)
+                .dy;
+            canvasWrapper.drawText(tp, Offset(x, y), bottomTitles.rotateAngle);
+          }
+        },
+      );
+    }
+  }
+
+  @visibleForTesting
   void drawSpots(
-    BuildContext context,
-    CanvasWrapper canvasWrapper,
-    PaintHolder<ScatterChartData> holder,
-  ) {
+      CanvasWrapper canvasWrapper, PaintHolder<ScatterChartData> holder) {
     final data = holder.data;
     final viewSize = canvasWrapper.size;
+    final chartUsableSize = getChartUsableDrawSize(viewSize, holder);
     final clip = data.clipData;
     final border = data.borderData.show ? data.borderData.border : null;
 
@@ -66,33 +252,34 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
 
       if (clip.left) {
         final borderWidth = border?.left.width ?? 0;
-        left = borderWidth / 2;
+        left = getLeftOffsetDrawSize(holder) + (borderWidth / 2);
       }
       if (clip.top) {
         final borderWidth = border?.top.width ?? 0;
-        top = borderWidth / 2;
+        top = getTopOffsetDrawSize(holder) + (borderWidth / 2);
       }
       if (clip.right) {
         final borderWidth = border?.right.width ?? 0;
-        right = viewSize.width - (borderWidth / 2);
+        right = getLeftOffsetDrawSize(holder) +
+            chartUsableSize.width -
+            (borderWidth / 2);
       }
       if (clip.bottom) {
         final borderWidth = border?.bottom.width ?? 0;
-        bottom = viewSize.height - (borderWidth / 2);
+        bottom = getTopOffsetDrawSize(holder) +
+            chartUsableSize.height -
+            (borderWidth / 2);
       }
 
       canvasWrapper.clipRect(Rect.fromLTRB(left, top, right, bottom));
     }
 
-    final List<ScatterSpot> sortedSpots = data.scatterSpots.toList()
-      ..sort((ScatterSpot a, ScatterSpot b) => b.radius.compareTo(a.radius));
-
-    for (final scatterSpot in sortedSpots) {
+    for (final scatterSpot in data.scatterSpots) {
       if (!scatterSpot.show) {
         continue;
       }
-      final pixelX = getPixelX(scatterSpot.x, viewSize, holder);
-      final pixelY = getPixelY(scatterSpot.y, viewSize, holder);
+      final pixelX = getPixelX(scatterSpot.x, chartUsableSize, holder);
+      final pixelY = getPixelY(scatterSpot.y, chartUsableSize, holder);
 
       _spotsPaint.color = scatterSpot.color;
 
@@ -101,76 +288,6 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
         scatterSpot.radius,
         _spotsPaint,
       );
-    }
-
-    if (data.scatterLabelSettings.showLabel) {
-      for (int i = 0; i < data.scatterSpots.length; i++) {
-        final ScatterSpot scatterSpot = data.scatterSpots[i];
-        final int spotIndex = i;
-
-        String label =
-            data.scatterLabelSettings.getLabelFunction(spotIndex, scatterSpot);
-
-        if (label.isEmpty || !scatterSpot.show) {
-          continue;
-        }
-
-        final span = TextSpan(
-          text: label,
-          style: Utils().getThemeAwareTextStyle(
-            context,
-            data.scatterLabelSettings.getLabelTextStyleFunction(
-              spotIndex,
-              scatterSpot,
-            ),
-          ),
-        );
-
-        final tp = TextPainter(
-          text: span,
-          textAlign: TextAlign.center,
-          textDirection: holder.data.scatterLabelSettings.textDirection,
-          textScaleFactor: holder.textScale,
-        );
-
-        tp.layout(maxWidth: viewSize.width);
-
-        final pixelX = getPixelX(scatterSpot.x, viewSize, holder);
-        final pixelY = getPixelY(scatterSpot.y, viewSize, holder);
-
-        double newPixelY;
-
-        /// To ensure the label is centered horizontally with respect to the spot.
-        double newPixelX = pixelX - tp.width / 2;
-
-        double centerChartY = viewSize.height / 2;
-
-        /// if the spot is in the lower half of the chart, then draw the label either in the center or above the spot,
-        /// if the spot is in upper half of the chart, then draw the label either in the center or below the spot.
-        if (pixelY > centerChartY) {
-          /// if either the height or the width of the spot is greater than the radius of the spot, then draw the label above the bubble,
-          /// else draw the label inside the bubble.
-          var off = (scatterSpot.radius * 1.5 < tp.height ||
-                  scatterSpot.radius * 1.5 < tp.width)
-              ? scatterSpot.radius + tp.height
-              : tp.height / 2;
-
-          newPixelY = pixelY - off;
-        } else {
-          /// if either the height or the width of the spot is greater than the radius of the spot, then draw the label below the bubble,
-          /// else draw the label inside the bubble.
-          var off = (scatterSpot.radius * 1.5 < tp.height ||
-                  scatterSpot.radius * 1.5 < tp.width)
-              ? scatterSpot.radius
-              : -tp.height / 2;
-          newPixelY = pixelY + off;
-        }
-
-        canvasWrapper.drawText(
-          tp,
-          Offset(newPixelX, newPixelY),
-        );
-      }
     }
 
     if (data.clipData.any) {
@@ -206,6 +323,7 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
       ScatterSpot showOnSpot,
       PaintHolder<ScatterChartData> holder) {
     final viewSize = canvasWrapper.size;
+    final chartUsableSize = getChartUsableDrawSize(viewSize, holder);
 
     final tooltipItem = tooltipData.getTooltipItems(showOnSpot);
 
@@ -233,8 +351,8 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
     /// there are more than one FlCandidate on touch area,
     /// we should get the most top FlSpot Offset to draw the tooltip on top of it
     final mostTopOffset = Offset(
-      getPixelX(showOnSpot.x, viewSize, holder),
-      getPixelY(showOnSpot.y, viewSize, holder),
+      getPixelX(showOnSpot.x, chartUsableSize, holder),
+      getPixelY(showOnSpot.y, chartUsableSize, holder),
     );
 
     final tooltipWidth = width + tooltipData.tooltipPadding.horizontal;
@@ -330,6 +448,83 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
     );
   }
 
+  /// We add our needed horizontal space to parent needed.
+  /// we have some titles that maybe draw in the left and right side of our chart,
+  /// then we should draw the chart a with some left space,
+  /// the left space is [getLeftOffsetDrawSize],
+  /// and the whole space is [getExtraNeededHorizontalSpace]
+  @override
+  double getExtraNeededHorizontalSpace(PaintHolder<ScatterChartData> holder) {
+    final data = holder.data;
+    var sum = super.getExtraNeededHorizontalSpace(holder);
+    if (data.titlesData.show) {
+      final leftSide = data.titlesData.leftTitles;
+      if (leftSide.showTitles) {
+        sum += leftSide.reservedSize + leftSide.margin;
+      }
+
+      final rightSide = data.titlesData.rightTitles;
+      if (rightSide.showTitles) {
+        sum += rightSide.reservedSize + rightSide.margin;
+      }
+    }
+    return sum;
+  }
+
+  /// We add our needed vertical space to parent needed.
+  /// we have some titles that maybe draw in the top and bottom side of our chart,
+  /// then we should draw the chart a with some top space,
+  /// the top space is [getTopOffsetDrawSize()],
+  /// and the whole space is [getExtraNeededVerticalSpace]
+  @override
+  double getExtraNeededVerticalSpace(PaintHolder<ScatterChartData> holder) {
+    final data = holder.data;
+    var sum = super.getExtraNeededVerticalSpace(holder);
+    if (data.titlesData.show) {
+      final topSide = data.titlesData.topTitles;
+      if (topSide.showTitles) {
+        sum += topSide.reservedSize + topSide.margin;
+      }
+
+      final bottomSide = data.titlesData.bottomTitles;
+      if (bottomSide.showTitles) {
+        sum += bottomSide.reservedSize + bottomSide.margin;
+      }
+    }
+    return sum;
+  }
+
+  /// calculate left offset for draw the chart,
+  /// maybe we want to show both left and right titles,
+  /// then just the left titles will effect on this function.
+  @override
+  double getLeftOffsetDrawSize(PaintHolder<ScatterChartData> holder) {
+    final data = holder.data;
+    var sum = super.getLeftOffsetDrawSize(holder);
+
+    final leftTitles = data.titlesData.leftTitles;
+    if (data.titlesData.show && leftTitles.showTitles) {
+      sum += leftTitles.reservedSize + leftTitles.margin;
+    }
+    return sum;
+  }
+
+  /// calculate top offset for draw the chart,
+  /// maybe we want to show both top and bottom titles,
+  /// then just the top titles will effect on this function.
+  @override
+  double getTopOffsetDrawSize(PaintHolder<ScatterChartData> holder) {
+    final data = holder.data;
+    var sum = super.getTopOffsetDrawSize(holder);
+
+    final topTitles = data.titlesData.topTitles;
+    if (data.titlesData.show && topTitles.showTitles) {
+      sum += topTitles.reservedSize + topTitles.margin;
+    }
+
+    return sum;
+  }
+
   /// Makes a [ScatterTouchedSpot] based on the provided [localPosition]
   ///
   /// Processes [localPosition] and checks
@@ -339,16 +534,17 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
   /// Returns null if finds nothing!
   ScatterTouchedSpot? handleTouch(
     Offset localPosition,
-    Size viewSize,
+    Size size,
     PaintHolder<ScatterChartData> holder,
   ) {
     final data = holder.data;
+    final chartViewSize = getChartUsableDrawSize(size, holder);
 
     for (var i = 0; i < data.scatterSpots.length; i++) {
       final spot = data.scatterSpots[i];
 
-      final spotPixelX = getPixelX(spot.x, viewSize, holder);
-      final spotPixelY = getPixelY(spot.y, viewSize, holder);
+      final spotPixelX = getPixelX(spot.x, chartViewSize, holder);
+      final spotPixelY = getPixelY(spot.y, chartViewSize, holder);
 
       final distance =
           (localPosition - Offset(spotPixelX, spotPixelY)).distance;

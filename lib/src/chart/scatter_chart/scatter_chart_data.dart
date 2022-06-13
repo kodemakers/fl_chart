@@ -15,9 +15,9 @@ import 'scatter_chart_helper.dart';
 /// including background color, scatter spots, ...
 class ScatterChartData extends AxisChartData with EquatableMixin {
   final List<ScatterSpot> scatterSpots;
+  final FlTitlesData titlesData;
   final ScatterTouchData scatterTouchData;
   final List<int> showingTooltipIndicators;
-  final ScatterLabelSettings scatterLabelSettings;
 
   /// [ScatterChart] draws some points in a square space,
   /// points are defined by [scatterSpots],
@@ -46,6 +46,7 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
     List<int>? showingTooltipIndicators,
     FlGridData? gridData,
     FlBorderData? borderData,
+    FlAxisTitleData? axisTitleData,
     double? minX,
     double? maxX,
     double? baselineX,
@@ -54,16 +55,15 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
     double? baselineY,
     FlClipData? clipData,
     Color? backgroundColor,
-    ScatterLabelSettings? scatterLabelSettings,
   })  : scatterSpots = scatterSpots ?? const [],
+        titlesData = titlesData ?? FlTitlesData(),
         scatterTouchData = scatterTouchData ?? ScatterTouchData(),
         showingTooltipIndicators = showingTooltipIndicators ?? const [],
-        scatterLabelSettings = scatterLabelSettings ?? ScatterLabelSettings(),
         super(
           gridData: gridData ?? FlGridData(),
           touchData: scatterTouchData ?? ScatterTouchData(),
           borderData: borderData,
-          titlesData: titlesData ?? FlTitlesData(),
+          axisTitleData: axisTitleData ?? FlAxisTitleData(),
           clipData: clipData ?? FlClipData.none(),
           backgroundColor: backgroundColor,
           minX: minX ??
@@ -98,6 +98,8 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
             a.showingTooltipIndicators, b.showingTooltipIndicators, t),
         gridData: FlGridData.lerp(a.gridData, b.gridData, t),
         borderData: FlBorderData.lerp(a.borderData, b.borderData, t),
+        axisTitleData:
+            FlAxisTitleData.lerp(a.axisTitleData, b.axisTitleData, t),
         minX: lerpDouble(a.minX, b.minX, t),
         maxX: lerpDouble(a.maxX, b.maxX, t),
         baselineX: lerpDouble(a.baselineX, b.baselineX, t),
@@ -106,8 +108,6 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
         baselineY: lerpDouble(a.baselineY, b.baselineY, t),
         clipData: b.clipData,
         backgroundColor: Color.lerp(a.backgroundColor, b.backgroundColor, t),
-        scatterLabelSettings: ScatterLabelSettings.lerp(
-            a.scatterLabelSettings, b.scatterLabelSettings, t),
       );
     } else {
       throw Exception('Illegal State');
@@ -123,6 +123,7 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
     List<int>? showingTooltipIndicators,
     FlGridData? gridData,
     FlBorderData? borderData,
+    FlAxisTitleData? axisTitleData,
     double? minX,
     double? maxX,
     double? baselineX,
@@ -131,7 +132,6 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
     double? baselineY,
     FlClipData? clipData,
     Color? backgroundColor,
-    ScatterLabelSettings? scatterLabelSettings,
   }) {
     return ScatterChartData(
       scatterSpots: scatterSpots ?? this.scatterSpots,
@@ -141,6 +141,7 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
           showingTooltipIndicators ?? this.showingTooltipIndicators,
       gridData: gridData ?? this.gridData,
       borderData: borderData ?? this.borderData,
+      axisTitleData: axisTitleData ?? this.axisTitleData,
       minX: minX ?? this.minX,
       maxX: maxX ?? this.maxX,
       baselineX: baselineX ?? this.baselineX,
@@ -149,7 +150,6 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
       baselineY: baselineY ?? this.baselineY,
       clipData: clipData ?? this.clipData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
-      scatterLabelSettings: scatterLabelSettings ?? this.scatterLabelSettings,
     );
   }
 
@@ -157,11 +157,15 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
   @override
   List<Object?> get props => [
         scatterSpots,
+        titlesData,
         scatterTouchData,
         showingTooltipIndicators,
         gridData,
-        titlesData,
-        rangeAnnotations,
+        touchData,
+        borderData,
+        axisTitleData,
+        clipData,
+        backgroundColor,
         minX,
         maxX,
         baselineX,
@@ -169,11 +173,6 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
         maxY,
         baselineY,
         rangeAnnotations,
-        scatterLabelSettings,
-        clipData,
-        backgroundColor,
-        borderData,
-        touchData,
       ];
 }
 
@@ -571,98 +570,4 @@ class ScatterChartDataTween extends Tween<ScatterChartData> {
   ScatterChartData lerp(double t) {
     return begin!.lerp(begin!, end!, t);
   }
-}
-
-/// It gives you the index value as well as the spot and gets the text style of the label.
-typedef GetLabelTextStyleFunction = TextStyle? Function(
-  int spotIndex,
-  ScatterSpot spot,
-);
-
-/// It gives you the index value as well as the spot and returns the label of the spot.
-typedef GetLabelFunction = String Function(
-  int spotIndex,
-  ScatterSpot spot,
-);
-
-/// It gives you the default text style of the label for a spot.
-TextStyle? getDefaultLabelTextStyleFunction(
-  int spotIndex,
-  ScatterSpot spot,
-) {
-  return null;
-}
-
-/// It gives you the default label of the spot.
-String getDefaultLabelFunction(
-  int spotIndex,
-  ScatterSpot spot,
-) {
-  return '${spot.radius}';
-}
-
-/// Defines information about the labels in the [ScatterChart]
-class ScatterLabelSettings with EquatableMixin {
-  /// Determines whether to show or hide the labels.
-  final bool showLabel;
-
-  /// This function gives you the index value of the spot in the list and returns the text style.
-  final GetLabelTextStyleFunction getLabelTextStyleFunction;
-
-  /// This function gives you the index value of the spot in the list and returns the label.
-  final GetLabelFunction getLabelFunction;
-
-  /// Determines the direction of the text for the labels.
-  final TextDirection textDirection;
-
-  /// You can change [showLabel] value to show or hide the label,
-  /// [textStyle] defines the style of label in the [ScatterChart].
-  ScatterLabelSettings({
-    bool? showLabel,
-    GetLabelTextStyleFunction? getLabelTextStyleFunction,
-    GetLabelFunction? getLabelFunction,
-    TextDirection? textDirection,
-  })  : showLabel = showLabel ?? false,
-        getLabelTextStyleFunction =
-            getLabelTextStyleFunction ?? getDefaultLabelTextStyleFunction,
-        getLabelFunction = getLabelFunction ?? getDefaultLabelFunction,
-        textDirection = textDirection ?? TextDirection.ltr;
-
-  ScatterLabelSettings copyWith({
-    bool? showLabel,
-    GetLabelTextStyleFunction? getLabelTextStyleFunction,
-    GetLabelFunction? getLabelFunction,
-    TextDirection? textDirection,
-  }) {
-    return ScatterLabelSettings(
-      showLabel: showLabel ?? this.showLabel,
-      getLabelTextStyleFunction:
-          getLabelTextStyleFunction ?? this.getLabelTextStyleFunction,
-      getLabelFunction: getLabelFunction ?? this.getLabelFunction,
-      textDirection: textDirection ?? this.textDirection,
-    );
-  }
-
-  /// Lerps a [ScatterLabelSettings] based on [t] value, check [Tween.lerp].
-  static ScatterLabelSettings lerp(
-    ScatterLabelSettings a,
-    ScatterLabelSettings b,
-    double t,
-  ) {
-    return ScatterLabelSettings(
-      showLabel: b.showLabel,
-      getLabelTextStyleFunction: b.getLabelTextStyleFunction,
-      getLabelFunction: b.getLabelFunction,
-      textDirection: b.textDirection,
-    );
-  }
-
-  /// Used for equality check, see [EquatableMixin].
-  @override
-  List<Object?> get props => [
-        showLabel,
-        getLabelTextStyleFunction,
-        getLabelFunction,
-        textDirection,
-      ];
 }
