@@ -829,7 +829,7 @@ class FlDotCustomePainter extends FlDotPainter {
     double? strokeWidth,
     required DrawableRoot icon,
   })  : color = color ?? Colors.green,
-        radius = radius ?? 4.0,
+        radius = radius ?? 13.0,
         strokeColor = strokeColor ?? Colors.green.darken(),
         strokeWidth = strokeWidth ?? 1.0,
         icon = icon;
@@ -840,7 +840,8 @@ class FlDotCustomePainter extends FlDotPainter {
     if (strokeWidth != 0.0 && strokeColor.opacity != 0.0) {
       canvas
         ..save()
-        ..translate(offsetInCanvas.dx - 15, offsetInCanvas.dy - 15);
+        ..translate(offsetInCanvas.dx - radius, offsetInCanvas.dy - radius);
+      icon.scaleCanvasToViewBox(canvas, getSize(spot));
       icon.draw(canvas, Rect.zero);
       canvas.restore();
     }
