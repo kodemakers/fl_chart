@@ -125,8 +125,10 @@ class _LineChartState extends AnimatedWidgetBaseState<LineChart> {
     }
     if (spotIndex != null && spot != null) {
       _showingTouchedTooltips.clear();
+      _showingTouchedIndicators.clear();
       _showingTouchedTooltips
           .add(ShowingTooltipIndicators([LineBarSpot(widget.data.lineBarsData.first, spotIndex, spot)]));
+      _showingTouchedIndicators[0] = [spotIndex];
     }
   }
 

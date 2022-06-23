@@ -1,13 +1,13 @@
 {
-  "search.exclude": {
-      "/.fvm": true
-  },
-  "files.watcherExclude": {
-      "/.fvm": true
-  },
-  "dart.flutterSdkPaths": [
-      "/home/kode/fvm/versions",
-      "/home/kode/flutter"
-  ],
-  "dart.flutterSdkPath": "/home/kode/fvm/versions/3.0.0"
+    "search.exclude": {
+        "/.fvm": true
+    },
+    "files.watcherExclude": {
+        "/.fvm": true
+    },
+    "dart.flutterSdkPaths": [
+        "/Users/kodemakers/fvm/versions",
+        // "/home/developer/flutter"
+    ],
+    "dart.flutterSdkPath": "/Users/kodemakers/fvm/versions/3.0.0"
 }
