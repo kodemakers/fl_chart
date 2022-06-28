@@ -213,6 +213,7 @@ class LineChartBarData with EquatableMixin {
   /// determines the color of drawing line, if one color provided it applies a solid color,
   /// otherwise it gradients between provided colors for drawing the line.
   final List<Color> colors;
+  final List<Color>? touchSpotColor;
 
   /// Determines the gradient color stops, if multiple [colors] provided.
   final List<double>? colorStops;
@@ -314,6 +315,7 @@ class LineChartBarData with EquatableMixin {
     List<FlSpot>? spots,
     bool? show,
     List<Color>? colors,
+    List<Color>? touchSpotColor,
     List<double>? colorStops,
     Offset? gradientFrom,
     Offset? gradientTo,
@@ -335,6 +337,7 @@ class LineChartBarData with EquatableMixin {
         show = show ?? true,
         colors = colors ?? const [Colors.cyan],
         colorStops = colorStops,
+        touchSpotColor = touchSpotColor,
         gradientFrom = gradientFrom ?? const Offset(0, 0),
         gradientTo = gradientTo ?? const Offset(1, 0),
         barWidth = barWidth ?? 2.0,
@@ -1671,7 +1674,7 @@ double _xDistance(Offset touchPoint, Offset spotPixelCoordinates) {
 List<TouchedSpotIndicatorData> defaultTouchedIndicators(LineChartBarData barData, List<int> indicators) {
   return indicators.map((int index) {
     /// Indicator Line
-    var lineColor = barData.colors[0];
+    var lineColor = barData.touchSpotColor?[0] ?? barData.colors[0];
     if (barData.dotData.show) {
       lineColor = _defaultGetDotColor(barData.spots[index], 0, barData);
     }
