@@ -371,6 +371,7 @@ class LineChartBarData with EquatableMixin {
       dotData: FlDotData.lerp(a.dotData, b.dotData, t),
       dashArray: lerpIntList(a.dashArray, b.dashArray, t),
       colors: lerpColorList(a.colors, b.colors, t),
+      touchSpotColor: b.touchSpotColor,
       colorStops: lerpDoubleList(a.colorStops, b.colorStops, t),
       gradientFrom: Offset.lerp(a.gradientFrom, b.gradientFrom, t),
       gradientTo: Offset.lerp(a.gradientTo, b.gradientTo, t),
@@ -411,6 +412,7 @@ class LineChartBarData with EquatableMixin {
       show: show ?? this.show,
       colors: colors ?? this.colors,
       colorStops: colorStops ?? this.colorStops,
+      touchSpotColor: touchSpotColor ?? touchSpotColor,
       gradientFrom: gradientFrom ?? this.gradientFrom,
       gradientTo: gradientTo ?? this.gradientTo,
       barWidth: barWidth ?? this.barWidth,
@@ -710,6 +712,9 @@ typedef GetDotColorCallback = Color Function(FlSpot, double, LineChartBarData);
 /// If there is one color in [LineChartBarData.colors], it returns that color,
 /// otherwise it returns the color along the gradient colors based on the [xPercentage].
 Color _defaultGetDotColor(FlSpot _, double xPercentage, LineChartBarData bar) {
+  if (bar.touchSpotColor != null && bar.touchSpotColor!.isNotEmpty) {
+    return bar.touchSpotColor![0];
+  }
   if (bar.colors.isEmpty) {
     throw ArgumentError('"colors" is empty.');
   } else if (bar.colors.length == 1) {
