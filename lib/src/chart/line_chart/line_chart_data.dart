@@ -1675,7 +1675,7 @@ List<TouchedSpotIndicatorData> defaultTouchedIndicators(LineChartBarData barData
   return indicators.map((int index) {
     /// Indicator Line
     var lineColor = barData.touchSpotColor?[0] ?? barData.colors[0];
-    if (barData.dotData.show) {
+    if (barData.dotData.show && barData.touchSpotColor == null) {
       lineColor = _defaultGetDotColor(barData.spots[index], 0, barData);
     }
     const lineStrokeWidth = 4.0;
