@@ -6,8 +6,8 @@
         "/.fvm": true
     },
     "dart.flutterSdkPaths": [
-        "/Users/kodemakers/fvm/versions",
+        "/Users/kodecreators/fvm/versions",
         // "/home/developer/flutter"
     ],
-    "dart.flutterSdkPath": "/Users/kodemakers/fvm/versions/3.0.0"
+    "dart.flutterSdkPath": "/Users/kodecreators/fvm/versions/3.0.0"
 }
