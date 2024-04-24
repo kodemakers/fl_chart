@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' hide log;
 import 'dart:ui' as ui;
 
 import 'package:fl_chart/fl_chart.dart';
@@ -1276,6 +1277,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       drawOffset: rectDrawOffset,
       angle: rotateAngle,
       drawCallback: () {
+        print('WWWWWWWWWWWW');
+        log('WWWWWWWWWWWW');
         canvas1.drawRRect(roundedRect, _bgTouchTooltipPaint, onTapDown: (a) {
           print('WWWWWWWWWWWW');
         });
