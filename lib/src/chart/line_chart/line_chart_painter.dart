@@ -9,6 +9,7 @@ import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/extensions/paint_extension.dart';
 import 'package:fl_chart/src/extensions/path_extension.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:touchable/touchable.dart';
 
@@ -1158,6 +1159,10 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         style: Utils().getThemeAwareTextStyle(context, tooltipItem.textStyle),
         text: tooltipItem.text,
         children: tooltipItem.children,
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            log('RRRRRRRRRRRR');
+          },
       );
 
       final tp = TextPainter(
@@ -1277,8 +1282,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       drawOffset: rectDrawOffset,
       angle: rotateAngle,
       drawCallback: () {
-        print('WWWWWWWWWWWW');
-        log('WWWWWWWWWWWW');
         canvas1.drawRRect(roundedRect, _bgTouchTooltipPaint, onTapDown: (a) {
           print('WWWWWWWWWWWW');
         });
