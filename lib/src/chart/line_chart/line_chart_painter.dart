@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' hide log;
 import 'dart:ui' as ui;
 
@@ -9,9 +8,9 @@ import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/extensions/paint_extension.dart';
 import 'package:fl_chart/src/extensions/path_extension.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:touchable/touchable.dart';
+
+// import 'package:touchable/touchable.dart';
 
 import '../../../fl_chart.dart';
 import '../../utils/utils.dart';
@@ -1139,7 +1138,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     final chartUsableSize = getChartUsableDrawSize(viewSize, holder);
 
     const textsBelowMargin = 4;
-    final canvas1 = TouchyCanvas(context, canvasWrapper.canvas);
 
     /// creating TextPainters to calculate the width and height of the tooltip
     final drawingTextPainters = <TextPainter>[];
@@ -1159,10 +1157,10 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         style: Utils().getThemeAwareTextStyle(context, tooltipItem.textStyle),
         text: tooltipItem.text,
         children: tooltipItem.children,
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            log('RRRRRRRRRRRR');
-          },
+        // recognizer: TapGestureRecognizer()
+        //   ..onTap = () {
+        //     log('RRRRRRRRRRRR');
+        //   },
       );
 
       final tp = TextPainter(
@@ -1282,9 +1280,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       drawOffset: rectDrawOffset,
       angle: rotateAngle,
       drawCallback: () {
-        canvas1.drawRRect(roundedRect, _bgTouchTooltipPaint, onTapDown: (a) {
-          print('WWWWWWWWWWWW');
-        });
+        canvasWrapper.drawRRect(roundedRect, _bgTouchTooltipPaint);
       },
     );
 

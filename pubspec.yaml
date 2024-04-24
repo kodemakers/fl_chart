@@ -17,6 +17,6 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   vector_math: ^2.1.1 #Added to use in some generated codes of mockito
   flutter_svg: ^1.0.0
-  touchable: ^1.0.2
+  # touchable: ^1.0.2
   flutter_test:
     sdk: flutter
