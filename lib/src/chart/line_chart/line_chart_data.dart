@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart/src/app_flutter_svg/flutter_svg.dart';
 import 'package:fl_chart/src/chart/line_chart/line_chart_helper.dart';
 import 'package:fl_chart/src/extensions/color_extension.dart';
 import 'package:fl_chart/src/utils/lerp.dart';
 import 'package:flutter/material.dart' hide Image;
-import 'package:flutter_svg/flutter_svg.dart';
 
 /// [LineChart] needs this class to render itself.
 ///
