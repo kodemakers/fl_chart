@@ -1,13 +1,9 @@
 {
+    "dart.flutterSdkPath": ".fvm/flutter_sdk",
     "search.exclude": {
-        "/.fvm": true
+        "**/.fvm": true
     },
     "files.watcherExclude": {
-        "/.fvm": true
-    },
-    "dart.flutterSdkPaths": [
-        "/Users/kodecreators/fvm/versions",
-        // "/home/developer/flutter"
-    ],
-    "dart.flutterSdkPath": "/Users/kodecreators/fvm/versions/3.0.0"
+        "**/.fvm": true
+    }
 }

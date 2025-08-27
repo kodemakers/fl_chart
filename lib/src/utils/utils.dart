@@ -50,48 +50,40 @@ class Utils {
   }
 
   Offset calculateRotationOffset(Size size, double degree) {
-    final rotatedHeight = (size.width * math.sin(radians(degree))).abs() +
-        (size.height * cos(radians(degree))).abs();
-    final rotatedWidth = (size.width * cos(radians(degree))).abs() +
-        (size.height * sin(radians(degree))).abs();
-    return Offset(
-        (size.width - rotatedWidth) / 2, (size.height - rotatedHeight) / 2);
+    final rotatedHeight = (size.width * math.sin(radians(degree))).abs() + (size.height * cos(radians(degree))).abs();
+    final rotatedWidth = (size.width * cos(radians(degree))).abs() + (size.height * sin(radians(degree))).abs();
+    return Offset((size.width - rotatedWidth) / 2, (size.height - rotatedHeight) / 2);
   }
 
   /// Decreases [borderRadius] to <= width / 2
-  BorderRadius? normalizeBorderRadius(
-      BorderRadius? borderRadius, double width) {
+  BorderRadius? normalizeBorderRadius(BorderRadius? borderRadius, double width) {
     if (borderRadius == null) {
       return null;
     }
 
     Radius topLeft;
-    if (borderRadius.topLeft.x > width / 2 ||
-        borderRadius.topLeft.y > width / 2) {
+    if (borderRadius.topLeft.x > width / 2 || borderRadius.topLeft.y > width / 2) {
       topLeft = Radius.circular(width / 2);
     } else {
       topLeft = borderRadius.topLeft;
     }
 
     Radius topRight;
-    if (borderRadius.topRight.x > width / 2 ||
-        borderRadius.topRight.y > width / 2) {
+    if (borderRadius.topRight.x > width / 2 || borderRadius.topRight.y > width / 2) {
       topRight = Radius.circular(width / 2);
     } else {
       topRight = borderRadius.topRight;
     }
 
     Radius bottomLeft;
-    if (borderRadius.bottomLeft.x > width / 2 ||
-        borderRadius.bottomLeft.y > width / 2) {
+    if (borderRadius.bottomLeft.x > width / 2 || borderRadius.bottomLeft.y > width / 2) {
       bottomLeft = Radius.circular(width / 2);
     } else {
       bottomLeft = borderRadius.bottomLeft;
     }
 
     Radius bottomRight;
-    if (borderRadius.bottomRight.x > width / 2 ||
-        borderRadius.bottomRight.y > width / 2) {
+    if (borderRadius.bottomRight.x > width / 2 || borderRadius.bottomRight.y > width / 2) {
       bottomRight = Radius.circular(width / 2);
     } else {
       bottomRight = borderRadius.bottomRight;
@@ -131,14 +123,12 @@ class Utils {
   /// then using  [diffInAxis] / allowedCount, we can find out how much interval we need,
   /// then we round that number by finding nearest number in this pattern:
   /// 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 5000, 10000,...
-  double getEfficientInterval(double axisViewSize, double diffInAxis,
-      {double pixelPerInterval = 40}) {
+  double getEfficientInterval(double axisViewSize, double diffInAxis, {double pixelPerInterval = 40}) {
     final allowedCount = math.max(axisViewSize ~/ pixelPerInterval, 1);
     if (diffInAxis == 0) {
       return 1;
     }
-    final accurateInterval =
-        diffInAxis == 0 ? axisViewSize : diffInAxis / allowedCount;
+    final accurateInterval = diffInAxis == 0 ? axisViewSize : diffInAxis / allowedCount;
     return roundInterval(accurateInterval);
   }
 
@@ -249,16 +239,14 @@ class Utils {
   }
 
   /// Returns a TextStyle based on provided [context], if [providedStyle] provided we try to merge it.
-  TextStyle getThemeAwareTextStyle(
-      BuildContext context, TextStyle? providedStyle) {
+  TextStyle getThemeAwareTextStyle(BuildContext context, TextStyle? providedStyle) {
     final defaultTextStyle = DefaultTextStyle.of(context);
     var effectiveTextStyle = providedStyle;
     if (providedStyle == null || providedStyle.inherit) {
       effectiveTextStyle = defaultTextStyle.style.merge(providedStyle);
     }
-    if (MediaQuery.boldTextOverride(context)) {
-      effectiveTextStyle = effectiveTextStyle!
-          .merge(const TextStyle(fontWeight: FontWeight.bold));
+    if (MediaQuery.of(context).boldText) {
+      effectiveTextStyle = effectiveTextStyle!.merge(const TextStyle(fontWeight: FontWeight.bold));
     }
     return effectiveTextStyle ??= defaultTextStyle.style;
   }
@@ -268,8 +256,7 @@ class Utils {
   /// If there is a zero point in the axis, we a value that passes through it.
   /// For example if we have -3 to +3, with interval 2. if we start from -3, we get something like this: -3, -1, +1, +3
   /// But the most important point is zero in most cases. with this logic we get this: -2, 0, 2
-  double getBestInitialIntervalValue(double min, double max, double interval,
-      {double baseline = 0.0}) {
+  double getBestInitialIntervalValue(double min, double max, double interval, {double baseline = 0.0}) {
     final diff = (baseline - min);
     final mod = (diff % interval);
     if ((max - min).abs() <= mod) {
